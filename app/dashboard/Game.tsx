@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth, db } from '@/lib/firebase';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { db } from '@/lib/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import Map from '@/components/Map';
 import TokenBalance from '@/components/ui/TokenBalance';
@@ -10,15 +10,14 @@ import LogoutButton from '@/components/auth/LogoutButton';
 import Revelation from '@/components/Revelation';
 
 export default function Game() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading: authLoading } = useAuth();
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
   const [settingDestination, setSettingDestination] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    async function fetchBalance() {
       if (user) {
-        setUser(user);
         const docRef = doc(db, 'users', user.uid);
         const docSnap = await getDoc(docRef);
 
@@ -28,16 +27,16 @@ export default function Game() {
           await setDoc(docRef, { balance: 100 });
           setBalance(100);
         }
-      } else {
-        setUser(null);
       }
       setLoading(false);
-    });
+    }
 
-    return () => unsubscribe();
-  }, []);
+    if (!authLoading) {
+      fetchBalance();
+    }
+  }, [user, authLoading]);
 
-  if (loading) {
+  if (authLoading || loading) {
     return <div>Loading...</div>;
   }
 
