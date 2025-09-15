@@ -1,0 +1,24 @@
+
+Provide Context:
+The app is called the V3 App, part of the V3 Ecosystem. Its main purpose is to connect communities, empower individuals making positive change, and fund mission-driven initiatives. The target audience includes everyday people who want to earn tokens through geomining, nonprofits who want visibility and support, and local businesses that want to integrate into the ecosystem. The user experience should be smooth, modern, mobile-first, and rewarding — like CoinApp but with real-world social impact.
+
+Be Specific:
+Core features include:
+- Geomining MOBX tokens by simply moving around with the app open.
+- NFT sigil drops at specific locations for users to collect.
+- Integration with V3 Survival Bars (real-world product).
+- Staking MOBX tokens to support nonprofits and community efforts.
+- Highlighting people making a difference in their community.
+Preferred tech stack includes Next.js, Firebase (auth, firestore, storage), TailwindCSS for styling, and Vercel for deployment. Future features may use three.js for 3D visualization.
+
+Use Examples:
+User Story 1: As a user, I want to open the app and earn MOBX tokens by walking around my city, so I feel rewarded for exploring.  
+User Story 2: As a nonprofit, I want to register on the app so users can stake their MOBX tokens to support my cause.  
+User Story 3: As a business, I want to be listed on the map so users can discover and support me while earning tokens.  
+User Story 4: As a user, I want to collect limited edition NFT sigils when I visit certain community spots.
+
+Iterate and Refine:
+We will start with a simple working version: a Next.js app that connects to Firebase, shows a map, and allows basic geomining (tracking steps/location and awarding tokens). Once this core feature works, we’ll add NFTs, staking, survival bars, and community highlights.
+
+Ask About Services:
+The app will rely on Firebase (auth, firestore, hosting), Google Maps API (for mapping and location-based features), and Vercel (for deployment). Future integrations may include Stripe for payments, OpenSea for NFT marketplace connections, and third-party APIs for nonprofit data verification.
