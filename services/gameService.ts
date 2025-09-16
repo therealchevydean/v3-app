@@ -74,3 +74,7 @@ export async function deleteDestination(destinationId: string): Promise<void> {
     const destDocRef = doc(db, 'destinations', destinationId);
     await deleteDoc(destDocRef);
 }
+
+// Make sure getDistance is exported so Map.tsx can use it
+// Other existing exports remain unchanged
+export { getDistance };
