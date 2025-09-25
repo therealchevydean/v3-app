@@ -1,0 +1,50 @@
+name: Deploy V3 Agent
+
+on:
+  push:
+    branches:
+      - main   # Trigger deploys when you push to main
+  workflow_dispatch: # Allow manual runs
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write   # Needed for workload identity federation
+      contents: read    # Read repo contents
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Set up gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          install_components: "beta"
+
+      # 3. Authenticate with Workload Identity Federation
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_ID_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      # 4. Install dependencies (adjust if you’re using Python/Node/etc.)
+      - name: Install dependencies
+        run: |
+          npm install
+          npm run build
+
+      # 5. Deploy to Vertex AI Agent Engine
+      - name: Deploy agent
+        run: |
+          gcloud beta agent deploy v3-agent \
+            --project ${{ secrets.GCP_PROJECT_ID }} \
+            --location us-central1 \
+            --display-name "V3 Ecosystem Agent" \
+            --source .
+
