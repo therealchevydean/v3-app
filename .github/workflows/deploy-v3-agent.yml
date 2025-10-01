@@ -1,50 +1,43 @@
-name: Deploy V3 Agent
+name: Deploy Agent Vee 007 to Firebase
 
 on:
   push:
     branches:
-      - main   # Trigger deploys when you push to main
-  workflow_dispatch: # Allow manual runs
+      - main   # change branch if needed
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write   # Needed for workload identity federation
-      contents: read    # Read repo contents
-
     steps:
-      # 1. Checkout repo
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    # Checkout repo
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      # 2. Set up gcloud CLI
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          install_components: "beta"
+    # Authenticate to Google Cloud
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_ID_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
-      # 3. Authenticate with Workload Identity Federation
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_ID_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+    # Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
 
-      # 4. Install dependencies (adjust if you’re using Python/Node/etc.)
-      - name: Install dependencies
-        run: |
-          npm install
-          npm run build
+    # Install Firebase CLI
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
 
-      # 5. Deploy to Vertex AI Agent Engine
-      - name: Deploy agent
-        run: |
-          gcloud beta agent deploy v3-agent \
-            --project ${{ secrets.GCP_PROJECT_ID }} \
-            --location us-central1 \
-            --display-name "V3 Ecosystem Agent" \
-            --source .
+    # Build the Next.js client
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm install
+        npm run build
 
+    # Deploy to Firebase Hosting
+    - name: Deploy to Firebase Hosting
+      run: firebase deploy --only hosting --project ${{ secrets.GCP_PROJECT_ID }}
