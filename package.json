@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "eslint",
     "seed:nfts": "node --loader ts-node/esm scripts/seed-nft-pins.ts"
   },

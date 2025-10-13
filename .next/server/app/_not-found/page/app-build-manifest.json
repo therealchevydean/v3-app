@@ -2,11 +2,12 @@
   "pages": {
     "/_not-found/page": [
       "static/chunks/c102923d9b74a489.js",
-      "static/chunks/4dc255d80313e920.css",
-      "static/chunks/db704ab2a0d20cdf.js",
+      "static/chunks/9decdcfed78f3264.css",
+      "static/chunks/4e9b5332105d0d5c.js",
+      "static/chunks/91adb7bdb9870c6a.js",
       "static/chunks/224331449d7c7e57.js",
-      "static/chunks/743ef0792dd30de1.js",
-      "static/chunks/turbopack-4909ac79e46f2ffd.js"
+      "static/chunks/2008ffcf9e5b170c.js",
+      "static/chunks/turbopack-e601dd4f64abb171.js"
     ]
   }
 }
